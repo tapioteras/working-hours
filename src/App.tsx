@@ -77,11 +77,15 @@ function App() {
       <Heading padding={15} size="4xl">{currentTimeMoment.format(getTimePrintLayout().format)}</Heading>
       <Flex width={200} paddingLeft={15} flexDirection="row">
         <Input disabled value={currentTimeQuarter.toString()} marginRight={15} />
-        <Button onClick={() => setTimeTable([
-          ...timeTable, {
-            startTime: currentTimeQuarter,
-            startMoment: currentTimeMoment,
-          } as TimeTableRow
+        <Button onClick={() => setTimeTable(
+            // @ts-ignore
+          [
+            ...timeTable,
+            // @ts-ignore
+            {
+              startTime: currentTimeQuarter,
+              startMoment: currentTimeMoment,
+            } as TimeTableRow
         ])}>+</Button>
       </Flex>
       {timeTable.map(({ startTime, startMoment, endTime }, i) => (
