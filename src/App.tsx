@@ -69,7 +69,7 @@ function App() {
     const interval = setInterval(() => {
       setCurrentTimeQuarter(getNearestQuarterTimeByMinutes())
       setCurrentTimeMoment(moment())
-    }, 1000);
+    }, 500);
     return () => clearInterval(interval);
   }, []);
   return (
