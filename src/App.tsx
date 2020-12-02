@@ -1,7 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import moment from "moment-timezone";
 import { ChakraProvider, Input, Heading, Flex, Button, HStack, Box } from '@chakra-ui/react';
-import {Moment} from "moment";
+import * as rawMoment from "moment";
+
+interface TimePrintLayout {
+  hours: string
+  minutes: string
+  format: string
+  formatWithSeconds: string
+}
+
+const getTimePrintLayout = (): TimePrintLayout => {
+  const hours = "HH";
+  const minutes = "mm";
+  const seconds = "ss"
+  const format = `${hours}:${minutes}`;
+  const formatWithSeconds = `${hours}:${minutes}:${seconds}:`
+  return { hours, minutes, format, formatWithSeconds };
+};
 
 interface QuarterWithReach {
   round: number
@@ -24,7 +40,7 @@ const byReach = (minutes: number, round: number): QuarterWithReach => ({round, r
 const byNearestReach = (a: QuarterWithReach, b: QuarterWithReach) => (a.reach > b.reach) ? 1 : -1
 
 const getNearestQuarterTimeByMinutes = (
-  hours = moment().format("HH"),
+  hours = moment().format(getTimePrintLayout().hours),
   minutes: number = moment().minutes()
 ): String =>
   `${hours}:${quarters
@@ -40,7 +56,7 @@ interface TimeTableCell {
 
 interface TimeTableRow {
   id: number
-  startMoment : Moment,
+  startMoment : rawMoment.Moment,
   startTime: TimeTableCell
   endTime?: TimeTableCell
 }
@@ -58,12 +74,12 @@ function App() {
   }, []);
   return (
     <ChakraProvider>
-      <Heading padding={15} size="4xl">{currentTimeMoment.format("HH:mm")}</Heading>
+      <Heading padding={15} size="4xl">{currentTimeMoment.format(getTimePrintLayout().format)}</Heading>
       <Flex width={200} paddingLeft={15} flexDirection="row">
-        <Input disabled value={currentTimeQuarter} marginRight={15} />
+        <Input disabled value={currentTimeQuarter.toString()} marginRight={15} />
         <Button onClick={() => setTimeTable([
           ...timeTable, {
-            startTime: currentTimeQuarter
+            startTime: currentTimeQuarter,
             startMoment: currentTimeMoment,
           } as TimeTableRow
         ])}>+</Button>
@@ -77,7 +93,7 @@ function App() {
             -
           </Box>
           <Box>
-        {endTime || `${getNearestQuarterTimeByMinutes()} (${moment.utc(moment().diff(startMoment)).format("HH:mm:ss")})`}
+        {endTime || `${getNearestQuarterTimeByMinutes()} (${moment.utc(moment().diff(startMoment)).format(getTimePrintLayout().formatWithSeconds)})`}
           </Box>
         </HStack>
       ))}
