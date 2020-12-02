@@ -8,18 +8,29 @@ interface QuarterWithReach {
   reach: number
 }
 
-const quarters: number[] = [0, 15, 30, 45]
+interface QuarterWithPrintLayout {
+  quarter: number
+  printLayout: string
+}
+
+const quarters: QuarterWithPrintLayout[] = [
+  {quarter: 0, printLayout: "00"},
+  {quarter: 15, printLayout: "15"},
+  {quarter: 30, printLayout: "30"},
+  {quarter: 45, printLayout: "45"},
+  {quarter: 60, printLayout: "00"}
+]
 const byReach = (minutes: number, round: number): QuarterWithReach => ({round, reach: Math.abs(minutes - round)})
 const byNearestReach = (a: QuarterWithReach, b: QuarterWithReach) => (a.reach > b.reach) ? 1 : -1
 
 const getNearestQuarterTimeByMinutes = (
-  hours = moment().hours(),
+  hours = moment().format("HH"),
   minutes: number = moment().minutes()
 ): String =>
   `${hours}:${quarters
-    .map(round => byReach(minutes, round))
+    .map(({quarter, ...rest}) => ({...byReach(minutes, quarter), ...rest}))
     .sort(byNearestReach)
-    [0].round}`;
+    [0].printLayout}`;
 
 interface TimeTableCell {
   id: number,
