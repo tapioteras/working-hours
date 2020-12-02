@@ -84,8 +84,8 @@ function App() {
           } as TimeTableRow
         ])}>+</Button>
       </Flex>
-      {timeTable.map(({ startTime, startMoment, endTime }) => (
-        <HStack paddingTop={15} paddingLeft={15} spacing="24px">
+      {timeTable.map(({ startTime, startMoment, endTime }, i) => (
+        <HStack key={`timetable-row-${i}`} paddingTop={15} paddingLeft={15} spacing="24px">
           <Box>
         {startTime}
           </Box>
