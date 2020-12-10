@@ -7,9 +7,7 @@ export const getNearestQuarterMoment = (currentMoment = moment()): moment.Moment
   const reaches = [[0, 15], [15, 30], [30, 45], [45, 60]]
     .map(([a, b]) => ({ a, b, reachA: Math.abs(currentMoment.minutes() - a), reachB: Math.abs(currentMoment.minutes() - b) }))
     .sort((a, b) => a.reachA > b.reachA || b.reachB > b.reachB ? 1 : -1)
-  console.log(reaches)
   const { reachA, reachB, a , b } = reaches[0]
-
   if (reachA < reachB) {
     if (currentMoment.minutes() < a) {
       return currentMoment.add(reachA, "minutes")
