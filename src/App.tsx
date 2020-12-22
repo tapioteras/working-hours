@@ -107,7 +107,6 @@ const saveCurrentStartTimeToLocalStorage = (start) => {
 
 const getCurrentStartTimeFromLocalStorage = () => {
   const startTime = moment(localStorage.getItem(LOCAL_STORAGE_KEYS.currentStartTime) || "", format)
-  console.log(startTime.isValid())
   return startTime.isValid() ? startTime : null
 }
 
