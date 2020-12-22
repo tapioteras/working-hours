@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { ChakraProvider, Input, Heading, Flex, Button, HStack, Box } from '@chakra-ui/react';
 import {getNearestQuarterMoment} from "./momentHelper";
 import moment from "moment";
@@ -32,14 +32,14 @@ const ManualInput = ({start: initialStart, stop: initialStop, onAdd, addText = "
   const [stop, setStop] = useState(initialStop || "")
   return (<HStack bg={colors.primary} padding={padding} spacing={padding} direction="row">
     <Heading size={"m"}>manual input</Heading>
-    <Input border="white" bg={"white"} width={40} placeholder={`start ${formatInput}`} start="start" value={start} onChange={(e) => setStart(e.target.value)}/>
-    <Input border="white" bg={"white"} width={40} placeholder={`stop ${formatInput}`} name="stop" onChange={(e) => setStop(e.target.value)} value={stop} />
-    <Button disabled={isDisabled} {...buttonStyle} onClick={() => {
+    <Input margin={2} border="white" bg={"white"} width={40} placeholder={`start ${formatInput}`} start="start" value={start} onChange={(e) => setStart(e.target.value)}/>
+    <Input margin={2} border="white" bg={"white"} width={40} placeholder={`stop ${formatInput}`} name="stop" onChange={(e) => setStop(e.target.value)} value={stop} />
+    <Button margin={2} disabled={isDisabled} {...buttonStyle} onClick={() => {
       onAdd(start, stop)
       setStart("")
       setStop("")
     }}>{addText}</Button>
-    <Button disabled={isDisabled} {...buttonStyle} onClick={() => {
+    <Button margin={2} disabled={isDisabled} {...buttonStyle} onClick={() => {
       setStart("")
       setStop("")
     }}>x</Button>
@@ -85,19 +85,33 @@ const Summary = ({periods, currentPeriod}) => {
 }
 
 const removePeriod = (periods, idToRemove) => {
-  let newPeriods = periods
-  delete newPeriods?.[idToRemove]
-  return newPeriods
+  return periods.filter((p, i) => i !== idToRemove)
 }
 
 const editPeriod = (periods, idToEdit, newStart, newStop) => {
   return [...periods].map((p, i) => i === idToEdit ? {start: newStart, stop: newStop} : p)
 }
 
+const LOCAL_STORAGE_KEYS = {
+  workingHours: "workingHours"
+}
+
+const saveHoursToLocalStorage = (hours) => {
+  localStorage.setItem(LOCAL_STORAGE_KEYS.workingHours, JSON.stringify(hours))
+}
+
+const getHoursFromLocalStorage = () => JSON
+  .parse(localStorage.getItem(LOCAL_STORAGE_KEYS.workingHours) || "[]")
+  .map(({start, stop}) => ({ start: moment(start), stop: moment(stop)}))
+
 function App() {
-  const [workingPeriods, setWorkingPeriods] = useState([])
+  const [workingPeriods, setWorkingPeriods] = useState(getHoursFromLocalStorage())
   const [currentPeriod, setCurrentPeriod] = useState(null)
   const [currentMoment, setCurrentMoment] = useState(moment())
+  useEffect(() => {
+    saveHoursToLocalStorage(workingPeriods)
+  }, [workingPeriods])
+
   useInterval(() => {
     setCurrentMoment(moment())
   }, 500)
@@ -136,6 +150,10 @@ function App() {
         />)}
       </Box>
       <Box bg={colors.third}>{<Summary periods={workingPeriods} {...{currentPeriod}} />}</Box>
+      <Button onClick={() => {
+        setCurrentPeriod(null)
+        setWorkingPeriods([])
+      }}>Reset</Button>
     </ChakraProvider>
   );
 }
