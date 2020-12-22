@@ -93,11 +93,22 @@ const editPeriod = (periods, idToEdit, newStart, newStop) => {
 }
 
 const LOCAL_STORAGE_KEYS = {
-  workingHours: "workingHours"
+  workingHours: "workingHours",
+  currentStartTime: "currentStartTime"
 }
 
 const saveHoursToLocalStorage = (hours) => {
   localStorage.setItem(LOCAL_STORAGE_KEYS.workingHours, JSON.stringify(hours))
+}
+
+const saveCurrentStartTimeToLocalStorage = (start) => {
+  localStorage.setItem(LOCAL_STORAGE_KEYS.currentStartTime, start?.format(format) || "")
+}
+
+const getCurrentStartTimeFromLocalStorage = () => {
+  const startTime = moment(localStorage.getItem(LOCAL_STORAGE_KEYS.currentStartTime) || "", format)
+  console.log(startTime.isValid())
+  return startTime.isValid() ? startTime : null
 }
 
 const getHoursFromLocalStorage = () => JSON
@@ -106,11 +117,14 @@ const getHoursFromLocalStorage = () => JSON
 
 function App() {
   const [workingPeriods, setWorkingPeriods] = useState(getHoursFromLocalStorage())
-  const [currentPeriod, setCurrentPeriod] = useState(null)
+  const [currentPeriod, setCurrentPeriod] = useState(getCurrentStartTimeFromLocalStorage())
   const [currentMoment, setCurrentMoment] = useState(moment())
   useEffect(() => {
     saveHoursToLocalStorage(workingPeriods)
   }, [workingPeriods])
+  useEffect(() => {
+      saveCurrentStartTimeToLocalStorage(currentPeriod)
+  }, [currentPeriod])
 
   useInterval(() => {
     setCurrentMoment(moment())
@@ -153,6 +167,7 @@ function App() {
       <Button onClick={() => {
         setCurrentPeriod(null)
         setWorkingPeriods([])
+        saveCurrentStartTimeToLocalStorage("")
       }}>Reset</Button>
     </ChakraProvider>
   );
