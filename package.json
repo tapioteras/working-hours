@@ -21,7 +21,13 @@
   "main": "src/index.tsx",
   "scripts": {
     "start": "parcel index.html",
-    "test": "jest"
+    "test": "jest",
+    "prebuild-dev": "shx rm -rf dist/*",
+    "build": "parcel build index.html --public-url ./",
+    "build-dev": "parcel build index.html --no-minify --public-url ./",
+    "deliver": "yarn prebuild && yarn build && yarn push-gh-pages",
+    "push-gh-pages": "push-dir --dir=dist --branch=gh-pages --force --cleanup --verbose",
+    "prebuild": "shx rm -rf dist/*"
   },
   "eslintConfig": {
     "extends": [
@@ -32,6 +38,8 @@
     "@types/jest": "^26.0.16",
     "jest": "^26.6.3",
     "mockdate": "^3.0.2",
+    "push-dir": "^0.4.1",
+    "shx": "^0.3.3",
     "timekeeper": "^2.2.0",
     "ts-jest": "^26.4.4"
   }
