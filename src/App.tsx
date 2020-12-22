@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { ChakraProvider, Input, Heading, Flex, Button, HStack, Box } from '@chakra-ui/react';
+import { ChakraProvider, Input, Heading, Flex, Button, HStack, Box, Progress } from '@chakra-ui/react';
 import {getNearestQuarterMoment} from "./momentHelper";
 import moment from "moment";
 import useInterval from "@use-it/interval";
@@ -81,7 +81,16 @@ const Summary = ({periods, currentPeriod}) => {
     .filter(p => !!p)
     .map(({start, stop}) => stop.diff(start))
     .reduce((a,b) => a + b, 0)
-  return <Box p={padding}>total: {moment.utc(moment.duration(durations).asMilliseconds()).format(format)}</Box>
+  const fullWorkingDayMillis = moment.duration(7.5, "hours").asMilliseconds()
+  const currentDurationMillis = moment.duration(durations).asMilliseconds()
+  const percentage = (currentDurationMillis * 100) / fullWorkingDayMillis
+    const workLeftMillis = fullWorkingDayMillis - currentDurationMillis
+  return (
+    <Box p={padding}>
+      <Heading paddingBottom={padding}>total: {moment.utc(currentDurationMillis).format(format)}</Heading>
+      <Heading size="medium">{moment.utc(workLeftMillis > 0 ? workLeftMillis : 0).format(format)} left from full working day (7.5 hours)</Heading>
+      <Box><Progress colorScheme="green" size="lg" value={percentage} /></Box>
+    </Box>)
 }
 
 const removePeriod = (periods, idToRemove) => {
@@ -163,11 +172,11 @@ function App() {
         />)}
       </Box>
       <Box bg={colors.third}>{<Summary periods={workingPeriods} {...{currentPeriod}} />}</Box>
-      <Button onClick={() => {
+      <Box p={padding}><Button onClick={() => {
         setCurrentPeriod(null)
         setWorkingPeriods([])
         saveCurrentStartTimeToLocalStorage("")
-      }}>Reset</Button>
+      }}>Reset</Button></Box>
     </ChakraProvider>
   );
 }
