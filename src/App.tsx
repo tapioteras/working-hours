@@ -20,12 +20,16 @@ const buttonStyle = {
 
 const padding = 4
 
-const WorkingPeriod = ({id, start, stop}) => <HStack>
+const WorkingPeriod = ({id, start, stop, quarter}) => quarter ?
+  <HStack>
+    <Box borderRadius={4} bg={colors.fourth} p={padding}>{quarter === "plus" ? "+ 15 min" : "- 15 min"}</Box></HStack>
+  : <HStack>
   <Box borderRadius={4} bg={colors.fourth} p={padding}>{start?.format(format)}</Box>
   <Box>{" - "}</Box>
   <Box borderRadius={4} bg={colors.fourth} p={padding}>{stop && stop?.format(format)}</Box>
   <Box>{" = "}</Box>
-  <Box borderRadius={4} bg={colors.fourth} p={padding}>{stop && moment.duration(stop.diff(start)).humanize()} {stop && `(${moment.utc(stop.diff(start))?.format(format)})`}</Box></HStack>
+  <Box borderRadius={4} bg={colors.fourth} p={padding}>{stop && moment.duration(stop.diff(start)).humanize()} {stop && `(${moment.utc(stop.diff(start))?.format(format)})`}</Box>
+  </HStack>
 
 const ManualInput = ({start: initialStart, stop: initialStop, onAdd, addText = "+", isDisabled = false}) => {
   const [start, setStart] = useState(initialStart || "")
@@ -46,7 +50,7 @@ const ManualInput = ({start: initialStart, stop: initialStop, onAdd, addText = "
   </HStack>)
 }
 
-const WorkingPeriodWithControls = ({start, stop, id, onRemove, onEdit, isDisabled = false}) => {
+const WorkingPeriodWithControls = ({start, stop, id, quarter, onRemove, onEdit, isDisabled = false}) => {
   const [isEdit, setIsEdit] = useState(false)
   return (
     <HStack bg={colors.primary} p={padding}>
@@ -63,14 +67,14 @@ const WorkingPeriodWithControls = ({start, stop, id, onRemove, onEdit, isDisable
             setIsEdit(false)
           }}
         />
-        : <WorkingPeriod {...{start, stop, id}} />}
-      <Button disabled={isDisabled} {...buttonStyle} onClick={() => {
+        : <WorkingPeriod {...{start, stop, id, quarter}} />}
+      {!quarter && <Button disabled={isDisabled} {...buttonStyle} onClick={() => {
         if (!isEdit) {
           setIsEdit(true)
         } else {
           setIsEdit(false)
         }
-      }}>{isEdit ? "cancel" : "edit"}</Button>
+      }}>{isEdit ? "cancel" : "edit"}</Button>}
       <Button disabled={isDisabled} {...buttonStyle} onClick={onRemove}>-</Button>
     </HStack>
   )
@@ -152,6 +156,10 @@ function App() {
         setWorkingPeriods([...workingPeriods, {start: currentPeriod, stop: moment()}])
         setCurrentPeriod(null)
       }}>stop</Button>}
+        <Box paddingTop={padding}>
+          <Button onClick={() => setWorkingPeriods([...workingPeriods, { start: moment(), stop: moment().add(15, "minutes"), quarter: "plus",  }])} marginRight={padding}>+15 min</Button>
+          <Button onClick={() => setWorkingPeriods([...workingPeriods, { start: moment(), stop: moment().subtract(15, "minutes"), quarter: "minus" }])} marginRight={padding}>-15 min</Button>
+        </Box>
         {currentPeriod && <HStack p={padding}>current: <WorkingPeriod
           id={workingPeriods.length}
           start={currentPeriod || currentMoment}
@@ -162,6 +170,7 @@ function App() {
         {workingPeriods
           .filter((p) => !!p?.start && !!p?.stop)
           .map((p, i) => <WorkingPeriodWithControls
+            key={`working-period-row-${i}`}
             isDisabled={!!currentPeriod}
           id={i}
           {...p}
