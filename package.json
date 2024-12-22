@@ -22,19 +22,20 @@
     "scheduler": "^0.25.0",
     "typescript": "^5.7.2"
   },
-  "main": "src/index.js",
+  "main": "index.html",
   "type": "module",
+  "source": "index.html",
   "scripts": {
-    "start": "parcel index.html",
+    "start": "npx parcel index.html",
     "test": "jest",
-    "build": "parcel build index.html --public-url ./",
+    "build": "yarn prebuild && npx parcel build ./src/index.html --dist-dir dist --log-level verbose",
     "deploy": "yarn build && npx gh-pages -d dist",
     "prebuild": "shx rm -rf dist/*"
   },
   "targets": {
     "main": {
-      "source": "./src/index.html",
-      "distDir": "./dist"
+      "source": "src/index.html",
+      "distDir": "dist"
     }
   },
   "eslintConfig": {
