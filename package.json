@@ -1,8 +1,9 @@
 {
-  "name": "my-app",
+  "name": "working-hours",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@/components": "./src/components/",
     "@chakra-ui/react": "^3.2.3",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -33,6 +34,12 @@
     "push-gh-pages": "push-dir --dir=dist --branch=gh-pages --force --cleanup --verbose",
     "prebuild": "shx rm -rf dist/*"
   },
+  "targets": {
+    "main": {
+      "source": "src/index.html",
+      "distDir": "./dist"
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app"
@@ -42,6 +49,7 @@
     "@parcel/config-default": "^2.13.3",
     "@parcel/packager-raw-url": "^2.13.3",
     "@parcel/transformer-webmanifest": "^2.13.3",
+    "@parcel/validator-typescript": "^2.13.3",
     "@types/jest": "^29.5.14",
     "jest": "^29.7.0",
     "mockdate": "^3.0.5",
