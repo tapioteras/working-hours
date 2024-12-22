@@ -28,18 +28,19 @@
     "start": "parcel index.html",
     "test": "jest",
     "build": "parcel build index.html --public-url ./",
-    "deploy": "yarn build && gh-pages -d dist",
+    "deploy": "yarn build && npx gh-pages -d dist",
     "prebuild": "shx rm -rf dist/*"
   },
   "targets": {
     "main": {
-      "source": "src/index.html",
+      "source": "./src/index.html",
       "distDir": "./dist"
     }
   },
   "eslintConfig": {
     "extends": [
-      "react-app"
+      "react-app",
+      "@parcel/config-default"
     ]
   },
   "devDependencies": {

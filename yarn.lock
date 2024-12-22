@@ -4250,7 +4250,7 @@ p-try@^2.0.0:
 
 parcel@^2.13.3:
   version "2.13.3"
-  resolved "https://registry.npmjs.org/parcel/-/parcel-2.13.3.tgz"
+  resolved "https://registry.yarnpkg.com/parcel/-/parcel-2.13.3.tgz#d82c31ecf50169215e31a716b0f8ee5a20bdd865"
   integrity sha512-8GrC8C7J8mwRpAlk7EJ7lwdFTbCN+dcXH2gy5AsEs9pLfzo9wvxOTx6W0fzSlvCOvZOita+8GdfYlGfEt0tRgA==
   dependencies:
     "@parcel/config-default" "2.13.3"
