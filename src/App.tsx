@@ -9,6 +9,7 @@ import {
   Center,
   Flex,
   Separator,
+  IconButton,
 } from "@chakra-ui/react";
 
 import {
@@ -20,6 +21,8 @@ import {
 import moment from "moment";
 import useInterval from "@use-it/interval/dist/interval.esm.js";
 import { Provider } from "./components/ui/provider";
+import { LuUndo } from "react-icons/lu";
+import { MdEdit, MdOutlineDelete } from "react-icons/md";
 
 const format = "HH:mm:ss";
 const formatInput = "HH:mm";
@@ -31,9 +34,10 @@ const colors = {
   fourth: "#FF00FF",
 };
 
-const buttonStyle: ButtonProps = {
+const buttonProps: ButtonProps = {
   variant: "ghost",
-  _hover: { bg: "blackAlpha.300" },
+  _hover: { bg: "blackAlpha.400" },
+  rounded: "full",
 };
 
 const padding = 4;
@@ -72,7 +76,7 @@ const ManualInput = ({
   const [start, setStart] = useState(initialStart || "");
   const [stop, setStop] = useState(initialStop || "");
   return (
-    <Box padding={padding} direction="row">
+    <Flex padding={padding} direction="row">
       <Input
         variant="outline"
         margin={2}
@@ -94,7 +98,7 @@ const ManualInput = ({
       <Button
         margin={2}
         disabled={isDisabled}
-        {...buttonStyle}
+        {...buttonProps}
         onClick={() => {
           onAdd(start, stop);
           setStart("");
@@ -103,18 +107,7 @@ const ManualInput = ({
       >
         {addText}
       </Button>
-      <Button
-        margin={2}
-        disabled={isDisabled}
-        {...buttonStyle}
-        onClick={() => {
-          setStart("");
-          setStop("");
-        }}
-      >
-        Remove
-      </Button>
-    </Box>
+    </Flex>
   );
 };
 
@@ -135,7 +128,7 @@ const WorkingPeriodWithControls = ({
           {isEdit ? (
             <ManualInput
               isDisabled={isDisabled}
-              addText="Save"
+              addText="Update"
               start={start?.format?.(formatInput)}
               stop={stop?.format?.(formatInput)}
               onAdd={(newStart, newStop) => {
@@ -151,9 +144,9 @@ const WorkingPeriodWithControls = ({
         </Box>
         <Flex width="30%" justifyContent="flex-end">
           {!quarter && (
-            <Button
+            <IconButton
               disabled={isDisabled}
-              {...buttonStyle}
+              {...buttonProps}
               onClick={() => {
                 if (!isEdit) {
                   setIsEdit(true);
@@ -162,12 +155,12 @@ const WorkingPeriodWithControls = ({
                 }
               }}
             >
-              {isEdit ? "Cancel" : "Edit"}
-            </Button>
+              {isEdit ? <LuUndo /> : <MdEdit />}
+            </IconButton>
           )}
-          <Button disabled={isDisabled} {...buttonStyle} onClick={onRemove}>
-            Remove
-          </Button>
+          <IconButton disabled={isDisabled} {...buttonProps} onClick={onRemove}>
+            <MdOutlineDelete />
+          </IconButton>
         </Flex>
       </HStack>
       <Separator variant="dashed" />
@@ -247,11 +240,6 @@ const getHoursFromLocalStorage = () =>
   JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.workingHours) || "[]").map(
     ({ start, stop }) => ({ start: moment(start), stop: moment(stop) })
   );
-
-const buttonProps: ButtonProps = {
-  variant: "ghost",
-  _hover: { bg: "blackAlpha.400" },
-};
 
 function App() {
   const theme = {};
