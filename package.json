@@ -26,8 +26,8 @@
   "scripts": {
     "start": "parcel src/index.html",
     "test": "jest",
-    "build": "parcel build src/index.html --dist-dir dist --log-level verbose",
-    "deploy": "yarn build && npx gh-pages -d dist",
+    "build": "parcel build src/index.html --dist-dir dist --public-url /",
+    "deploy": "npx gh-pages -d dist",
     "prebuild": "shx rm -rf dist/*"
   },
   "eslintConfig": {
