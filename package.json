@@ -21,21 +21,14 @@
     "scheduler": "^0.25.0",
     "typescript": "^5.7.2"
   },
-  "main": "index.html",
   "type": "module",
-  "source": "index.tsx",
+  "source": "src/index.tsx",
   "scripts": {
-    "start": "parcel index.html",
+    "start": "parcel src/index.html",
     "test": "jest",
-    "build": "parcel build index.html --dist-dir dist --log-level verbose",
+    "build": "parcel build src/index.html --dist-dir dist --log-level verbose",
     "deploy": "yarn build && npx gh-pages -d dist",
     "prebuild": "shx rm -rf dist/*"
-  },
-  "targets": {
-    "main": {
-      "source": "src/index.html",
-      "distDir": "dist"
-    }
   },
   "eslintConfig": {
     "extends": [
