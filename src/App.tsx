@@ -50,7 +50,7 @@ const WorkingPeriod = ({ id, start, stop, quarter = null }) =>
       </Box>
     </HStack>
   ) : (
-    <HStack>
+    <HStack display="flex" flexWrap="wrap">
       <Box borderRadius={4} p={padding}>
         {start?.format(format)}
       </Box>
@@ -76,7 +76,7 @@ const ManualInput = ({
   const [start, setStart] = useState(initialStart || "");
   const [stop, setStop] = useState(initialStop || "");
   return (
-    <Flex padding={padding} direction="row">
+    <Flex flexWrap="wrap" padding={padding} direction="row">
       <Input
         variant="outline"
         margin={2}
@@ -342,7 +342,7 @@ function App() {
               </Button>
             </Box>
             {currentPeriod && (
-              <HStack p={padding}>
+              <HStack p={padding} display="flex" flexWrap="wrap">
                 current:{" "}
                 <WorkingPeriod
                   id={workingPeriods.length}
