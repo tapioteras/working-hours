@@ -26,7 +26,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "test": "jest",
-    "build": "parcel build src/index.html --dist-dir dist --public-url /",
+    "build": "parcel build src/index.html --dist-dir dist --public-url ./",
     "deploy": "npx gh-pages -d dist",
     "prebuild": "shx rm -rf dist/*"
   },
