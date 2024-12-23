@@ -10,15 +10,16 @@ import {
   Flex,
   Separator,
 } from "@chakra-ui/react";
-import { Provider } from "@/components/ui/provider";
+
 import {
   ProgressBar,
   ProgressLabel,
   ProgressRoot,
   ProgressValueText,
-} from "@/components/ui/progress";
+} from "./components/ui/progress";
 import moment from "moment";
 import useInterval from "@use-it/interval/dist/interval.esm.js";
+import { Provider } from "./components/ui/provider";
 
 const format = "HH:mm:ss";
 const formatInput = "HH:mm";

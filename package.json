@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@/components": "./src/components/",
     "@chakra-ui/react": "^3.2.3",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -24,11 +23,11 @@
   },
   "main": "index.html",
   "type": "module",
-  "source": "index.html",
+  "source": "index.tsx",
   "scripts": {
-    "start": "npx parcel index.html",
+    "start": "parcel index.html",
     "test": "jest",
-    "build": "yarn prebuild && npx parcel build ./src/index.html --dist-dir dist --log-level verbose",
+    "build": "parcel build index.html --dist-dir dist --log-level verbose",
     "deploy": "yarn build && npx gh-pages -d dist",
     "prebuild": "shx rm -rf dist/*"
   },
